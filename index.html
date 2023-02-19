@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Data Unit Converter</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css">
+    <link rel="canonical" href="https://ilyasozkurt.com/tools/youtube-profile-picture-and-banner-downloader"/>
+</head>
+<body>
+
+<div class="container py-5">
+
+    <h1>Data Unit Converter</h1>
+
+    <div class="row">
+
+        <div class="col-12 col-md-6 mb-3">
+            <label for="fromUnit" class="col-form-label">From Unit Type:</label>
+            <select id="fromUnit" class="form-select" onchange="calculate()">
+                <option value="bytes">Bytes</option>
+                <option value="kilobytes">Kilobytes</option>
+                <option value="megabytes">Megabytes</option>
+                <option value="gigabytes">Gigabytes</option>
+                <option value="terabytes">Terabytes</option>
+                <option value="petabytes">Petabytes</option>
+                <option value="exabytes">Exabytes</option>
+                <option value="zettabytes">Zettabytes</option>
+                <option value="yottabytes">Yottabytes</option>
+            </select>
+        </div>
+
+        <div class="col-12 col-md-6 mb-3">
+            <label for="baseValue" class="col-form-label">Base Value:</label>
+            <input type="number" id="baseValue" class="form-control" oninput="calculate()" step="any" min="0">
+        </div>
+
+        <div class="col-12 col-md-6 mb-3">
+            <label for="toUnit" class="col-form-label">To Unit Type:</label>
+            <select id="toUnit" class="form-select" onchange="calculate()">
+                <option value="bytes">Bytes</option>
+                <option value="kilobytes">Kilobytes</option>
+                <option value="megabytes">Megabytes</option>
+                <option value="gigabytes">Gigabytes</option>
+                <option value="terabytes">Terabytes</option>
+                <option value="petabytes">Petabytes</option>
+                <option value="exabytes">Exabytes</option>
+                <option value="zettabytes">Zettabytes</option>
+                <option value="yottabytes">Yottabytes</option>
+            </select>
+        </div>
+
+        <div class="col-12 col-md-6 mb-3">
+            <label for="result" class="col-form-label">Result:</label>
+            <input type="number" id="result" class="form-control" disabled>
+        </div>
+
+        <div class="col-12 mb-3">
+            <label for="formulaPreview" class="col-form-label">Conversion Formula:</label>
+            <div id="formulaPreview" class="text-muted">You need to set Base Value</div>
+        </div>
+
+        <div class="col-12 mb-3">
+            <h2>Base Value from Other Units:</h2>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th class="w-25">Unit</th>
+                    <th>Value</th>
+                </tr>
+                </thead>
+                <tbody id="unitTableBody"></tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function calculate() {
+        const fromUnit = document.getElementById("fromUnit").value;
+        const baseValue = document.getElementById("baseValue").value;
+        const toUnit = document.getElementById("toUnit").value;
+
+        const baseInBytes = convertToBytes(fromUnit, baseValue);
+        const result = convertFromBytes(toUnit, baseInBytes);
+
+        document.getElementById("result").value = result;
+
+        updateFormulaPreview(fromUnit, toUnit);
+        updateUnitTable(baseValue);
+    }
+
+    function convertToBytes(unit, value) {
+        switch (unit) {
+            case "bytes":
+                return value;
+            case "kilobytes":
+                return value * 1024;
+            case "megabytes":
+                return value * 1024 * 1024;
+            case "gigabytes":
+                return value * 1024 * 1024 * 1024;
+            case "terabytes":
+                return value * 1024 * 1024 * 1024 * 1024;
+            case "petabytes":
+                return value * 1024 * 1024 * 1024 * 1024 * 1024;
+            case "exabytes":
+                return value * 1024 * 1024 * 1024 * 1024 * 1024 * 1024;
+            case "zettabytes":
+                return value * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024;
+            case "yottabytes":
+                return value * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024;
+            default:
+                return 0;
+        }
+    }
+
+    function convertFromBytes(unit, bytes) {
+        switch (unit) {
+            case "bytes":
+                return bytes;
+            case "kilobytes":
+                return bytes / 1024;
+            case "megabytes":
+                return bytes / 1024 / 1024;
+            case "gigabytes":
+                return bytes / 1024 / 1024 / 1024;
+            case "terabytes":
+                return bytes / 1024 / 1024 / 1024 / 1024;
+            case "petabytes":
+                return bytes / 1024 / 1024 / 1024 / 1024 / 1024;
+            case "exabytes":
+                return bytes / 1024 / 1024 / 1024 / 1024 / 1024 / 1024;
+            case "zettabytes":
+                return bytes / 1024 / 1024 / 1024 / 1024 / 1024 / 1024 / 1024;
+            case "yottabytes":
+                return bytes / 1024 / 1024 / 1024 / 1024 / 1024 / 1024 / 1024 / 1024;
+            default:
+                return 0;
+        }
+    }
+
+    function updateFormulaPreview(fromUnit, toUnit) {
+        const fromUnitName = getUnitName(fromUnit);
+        const toUnitName = getUnitName(toUnit);
+        const formula = `<strong>${fromUnitName}</strong> to <strong>${toUnitName}</strong> conversion: (Base Value * ${getUnitSize(fromUnit)}) / ${getUnitSize(toUnit)}`;
+        document.getElementById("formulaPreview").innerHTML = formula;
+    }
+
+    function getUnitName(unit) {
+        switch (unit) {
+            case "bytes":
+                return "Bytes";
+            case "kilobytes":
+                return "Kilobytes";
+            case "megabytes":
+                return "Megabytes";
+            case "gigabytes":
+                return "Gigabytes";
+            case "terabytes":
+                return "Terabytes";
+            case "petabytes":
+                return "Petabytes";
+            case "exabytes":
+                return "Exabytes";
+            case "zettabytes":
+                return "Zettabytes";
+            case "yottabytes":
+                return "Yottabytes";
+            default:
+                return "";
+        }
+    }
+
+    function getUnitSize(unit) {
+        switch (unit) {
+            case "bytes":
+                return "1";
+            case "kilobytes":
+                return "1024";
+            case "megabytes":
+                return "1024 * 1024";
+            case "gigabytes":
+                return "1024 * 1024 * 1024";
+            case "terabytes":
+                return "1024 * 1024 * 1024 * 1024";
+            case "petabytes":
+                return "1024 * 1024 * 1024 * 1024 * 1024";
+            case "exabytes":
+                return "1024 * 1024 * 1024 * 1024 * 1024 * 1024";
+            case "zettabytes":
+                return "1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024";
+            case "yottabytes":
+                return "1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024";
+            default:
+                return "1";
+        }
+    }
+
+    function updateUnitTable(baseValue) {
+
+        const fromUnit = document.getElementById("fromUnit").value;
+        const tableBody = document.getElementById("unitTableBody");
+        tableBody.innerHTML = "";
+
+        const units = [
+            "bytes",
+            "kilobytes",
+            "megabytes",
+            "gigabytes",
+            "terabytes",
+            "petabytes",
+            "exabytes",
+            "zettabytes",
+            "yottabytes"
+        ];
+
+        units.forEach(unit => {
+            const baseInUnit = parseFloat(convertFromBytes(unit, convertToBytes(fromUnit, baseValue)));
+            const row = document.createElement("tr");
+            if (unit === fromUnit) {
+                row.classList.add("table-primary");
+                row.classList.add("fw-bold");
+            }
+            const unitName = document.createElement("td");
+            unitName.textContent = getUnitName(unit);
+            const unitValue = document.createElement("td");
+            unitValue.textContent = baseInUnit;
+            row.appendChild(unitName);
+            row.appendChild(unitValue);
+            tableBody.appendChild(row);
+        });
+
+    }
+
+</script>
+
+</body>
+</html>
